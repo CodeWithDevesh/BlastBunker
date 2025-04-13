@@ -7,11 +7,11 @@ Game::Game()
     worldDef.gravity.y = 0;
     m_b2WorldId = b2CreateWorld(&worldDef);
 
-    
     InitWindow(screenWidth, screenHeight, "BunkBlaster");
     SetTargetFPS(60);
     HideCursor();
     ToggleFullscreen();
+
     b2Vec2 pos;
     pos.x = 100;
     pos.y = 100;
@@ -50,6 +50,7 @@ void Game::Update()
 {
     tank->Update();
 }
+
 void Game::Render()
 {
     BeginDrawing();

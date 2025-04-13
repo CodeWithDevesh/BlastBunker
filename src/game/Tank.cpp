@@ -41,6 +41,22 @@ void Tank::Update()
     // b2Body_ApplyLinearImpulseToCenter(m_body, force, true);
 
     b2Body_SetLinearVelocity(m_body, vel);
+
+    // Get mouse movement delta
+    float deltaX = GetMouseDelta().x;
+    float deltaY = GetMouseDelta().y;
+
+    // Update turret direction based on mouse movement
+    turretX += deltaX * turretSensitivity;
+    turretY += deltaY * turretSensitivity;
+
+    // Normalize turret direction vector
+    float mag = sqrt(turretX * turretX + turretY * turretY);
+    if (mag > 0.0f)
+    {
+        turretX /= mag;
+        turretY /= mag;
+    }
 }
 
 void Tank::Draw()
@@ -50,11 +66,7 @@ void Tank::Draw()
     float mouseX = GetMouseX();
     float mouseY = GetMouseY();
 
-    float x = mouseX - pos.x;
-    float y = mouseY - pos.y;
-    float mag = sqrt((x*x + y*y));
-    x = 2 * m_radius * x/mag;
-    y = 2 * m_radius * y/mag;
-
-    DrawLine(pos.x, pos.y, pos.x + x, pos.y + y, BLUE);
+    // float mag = sqrt((turretX*turretX + turretY*turretY));
+    Vector2 turretOffset = Vector2Scale({turretX, turretY}, 2 * m_radius);
+    DrawLine(pos.x, pos.y, pos.x + turretOffset.x, pos.y + turretOffset.y, BLUE);
 }

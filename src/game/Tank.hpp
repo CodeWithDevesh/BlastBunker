@@ -1,6 +1,7 @@
 #pragma once
 #include <box2d/box2d.h>
 #include "raylib.h"
+#include "raymath.h"
 
 class Tank {
 public:
@@ -15,4 +16,8 @@ private:
     float m_acceleration = 10000.0f;
     float maxVelx = 200;
     float maxVely = 200;
+
+    float turretX = 0;
+    float turretY = 0;
+    float turretSensitivity = .01f;
 };
