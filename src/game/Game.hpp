@@ -1,5 +1,10 @@
 #pragma once
 #include <raylib.h>
+#include <box2d/box2d.h>
+#include "Tank.hpp"
+#include "Constants.hpp"
+#include <iostream>
+
 class Game
 {
 private:
@@ -14,4 +19,9 @@ private:
 
     const int screenWidth = 800;
     const int screenHeight = 450;
+    
+    b2WorldId m_b2WorldId;
+    Tank *tank;
+
+    float accumalator = 0;
 };
