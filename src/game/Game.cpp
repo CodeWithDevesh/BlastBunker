@@ -2,6 +2,7 @@
 
 Game::Game()
 {
+    b2SetLengthUnitsPerMeter(32);
     b2WorldDef worldDef = b2DefaultWorldDef();
     worldDef.gravity.x = 0;
     worldDef.gravity.y = 0;
@@ -9,13 +10,19 @@ Game::Game()
 
     InitWindow(screenWidth, screenHeight, "BunkBlaster");
     SetTargetFPS(60);
-    HideCursor();
-    ToggleFullscreen();
+    // ToggleFullscreen();
+    SetConfigFlags(FLAG_VSYNC_HINT | FLAG_WINDOW_UNDECORATED);
+    DisableCursor();
+    SetWindowState(FLAG_WINDOW_MOUSE_PASSTHROUGH);
+    SetMouseOffset(0, 0);
+    SetMouseScale(1, 1);
+
+    textureManager = new TextureManager();
 
     b2Vec2 pos;
-    pos.x = 100;
-    pos.y = 100;
-    tank = new Tank(m_b2WorldId, pos, 15);
+    pos.x = 0;
+    pos.y = 0;
+    tank = new Tank(m_b2WorldId, pos, textureManager);
 }
 
 Game::~Game()
@@ -25,6 +32,12 @@ Game::~Game()
         delete (tank);
         tank = nullptr;
     }
+    if(textureManager)
+    {
+        delete (textureManager);
+        textureManager = nullptr;
+    }
+
     b2DestroyWorld(m_b2WorldId);
     CloseWindow();
 }
@@ -34,7 +47,6 @@ void Game::run()
     while (!WindowShouldClose())
     {
         accumalator += GetFrameTime();
-        std::cout << accumalator << '\n';
 
         while (accumalator >= fixedTimeStep)
         {
@@ -57,5 +69,6 @@ void Game::Render()
     ClearBackground(BLACK);
     DrawFPS(10, 10);
     tank->Draw();
+
     EndDrawing();
 }
