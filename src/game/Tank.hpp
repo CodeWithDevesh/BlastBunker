@@ -7,6 +7,8 @@
 #include "Constants.hpp"
 #include "GameObject.hpp"
 
+class Game;
+
 class Tank : public GameObject
 {
 public:

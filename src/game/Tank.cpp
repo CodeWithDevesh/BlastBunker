@@ -1,4 +1,5 @@
 #include "Tank.hpp"
+#include "Game.hpp"
 
 Tank::Tank(b2WorldId world, b2Vec2 position, TextureManager *textureManager)
 {
@@ -19,12 +20,10 @@ Tank::Tank(b2WorldId world, b2Vec2 position, TextureManager *textureManager)
     bodyDef.position = position;
     m_body = b2CreateBody(world, &bodyDef);
 
-    b2ShapeDef shapeDef = b2DefaultShapeDef();
     // Define the shape
+    b2ShapeDef shapeDef = b2DefaultShapeDef();
     shapeDef.density = 1.0f;
-
     b2Polygon boxShape = b2MakeBox(bodyFrameWidth / 2, bodyFrameHeight / 2);
-
     m_shape = b2CreatePolygonShape(m_body, &shapeDef, &boxShape);
 }
 
@@ -52,8 +51,9 @@ void Tank::Update()
     if (IsKeyDown(KEY_RIGHT) || IsKeyDown(KEY_M))
         turretAngle += turretSensitivity;
 
-    if (IsKeyDown(KEY_SPACE)){
-        if(!firing)
+    if (IsKeyDown(KEY_SPACE))
+    {
+        if (!firing)
         {
             fire();
             firing = true;
@@ -102,9 +102,10 @@ void Tank::Draw()
     bodyPos.x = b2Body_GetPosition(m_body).x;
     bodyPos.y = screenHeight - b2Body_GetPosition(m_body).y;
 
-    // DrawTextureRec(m_bodyTexture, bodyFrameRec, tankPos, WHITE);
+    // Draw the body of tank
     DrawTexturePro(m_bodyTexture, bodyFrameRec, {bodyPos.x, bodyPos.y, (float)bodyFrameWidth, (float)bodyFrameHeight}, {(float)bodyFrameWidth / 2, (float)bodyFrameHeight / 2}, b2Rot_GetAngle(b2Body_GetRotation(m_body)) * RAD2DEG, WHITE);
-    // DrawTextureRec(m_turretTexture, turretFrameRec, turretPos, WHITE);
+
+    // Draw the turret
     DrawTexturePro(m_turretTexture, turretFrameRec, {bodyPos.x, bodyPos.y, (float)turretFrameWidth, (float)turretFrameHeight}, {(float)turretFrameWidth / 2, (float)turretFrameHeight - turretOffset}, b2Rot_GetAngle(b2Body_GetRotation(m_body)) * RAD2DEG + turretAngle, WHITE);
 
     // DrawRectangleLines(pos.x, pos.y, 102, 138, WHITE);
@@ -131,7 +132,7 @@ void Tank::updateAnimation()
     {
         turretTimer = 0.0f;
         currentTurretFrame = (currentTurretFrame + 1) % turretFrameCount;
-        if(currentTurretFrame == 0)
+        if (currentTurretFrame == 0)
         {
             firing = false;
         }
@@ -141,6 +142,8 @@ void Tank::updateAnimation()
     turretFrameRec.x = currentTurretFrame * turretFrameWidth;
 }
 
-void Tank::fire(){
-
+void Tank::fire()
+{
+    b2Vec2 pos = b2Body_GetPosition(m_body);
+    Game::spwanBullet(pos, b2MakeRot(b2Rot_GetAngle(b2Body_GetRotation(m_body)) + turretAngle / DEG2RAD));
 }

@@ -1,5 +1,7 @@
 #include "Game.hpp"
 
+Scene *Game::scene;
+
 Game::Game()
 {
     b2SetLengthUnitsPerMeter(32);
@@ -12,27 +14,23 @@ Game::Game()
     SetTargetFPS(60);
     // ToggleFullscreen();
     SetConfigFlags(FLAG_VSYNC_HINT | FLAG_WINDOW_UNDECORATED);
-    DisableCursor();
-    SetWindowState(FLAG_WINDOW_MOUSE_PASSTHROUGH);
-    SetMouseOffset(0, 0);
-    SetMouseScale(1, 1);
+    // DisableCursor();
+    // SetWindowState(FLAG_WINDOW_MOUSE_PASSTHROUGH);
+    // SetMouseOffset(0, 0);
+    // SetMouseScale(1, 1);
 
     textureManager = new TextureManager();
 
+    scene = new Scene(textureManager, m_b2WorldId);
     b2Vec2 pos;
     pos.x = 0;
     pos.y = 0;
-    tank = new Tank(m_b2WorldId, pos, textureManager);
+    scene->spawnTank(pos);
 }
 
 Game::~Game()
 {
-    if (tank)
-    {
-        delete (tank);
-        tank = nullptr;
-    }
-    if(textureManager)
+    if (textureManager)
     {
         delete (textureManager);
         textureManager = nullptr;
@@ -60,7 +58,7 @@ void Game::run()
 
 void Game::Update()
 {
-    tank->Update();
+    scene->update();
 }
 
 void Game::Render()
@@ -68,7 +66,11 @@ void Game::Render()
     BeginDrawing();
     ClearBackground(BLACK);
     DrawFPS(10, 10);
-    tank->Draw();
-
+    scene->render();
     EndDrawing();
+}
+
+void Game::spwanBullet(b2Vec2 pos, b2Rot dir)
+{
+    scene->spawnBullet(pos, dir);
 }

@@ -9,10 +9,10 @@
 class Bullet : public GameObject
 {
 public:
-    Bullet(b2WorldId world, b2Vec2 position, TextureManager* textureManager);
+    Bullet(b2WorldId world, b2Vec2 position, b2Rot rot, TextureManager *textureManager);
+    ~Bullet();
     void Update() override;
     void Draw() override;
-
 
 private:
     Texture2D m_bodyTexture;
