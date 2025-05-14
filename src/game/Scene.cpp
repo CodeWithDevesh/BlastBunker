@@ -1,9 +1,8 @@
 #include "Scene.hpp"
 
-Scene::Scene(TextureManager *manager, b2WorldId world)
+Scene::Scene(TextureManager *manager)
 {
     textureManager = manager;
-    this->world = world;
 }
 
 Scene::~Scene()
@@ -17,19 +16,11 @@ Scene::~Scene()
 
 void Scene::update()
 {
+    printf("%d\n", gameObjects.size());
     for (int i = 0; i < gameObjects.size();)
     {
         GameObject *obj = gameObjects[i];
 
-        // Debug log to track objects
-        if (obj)
-        {
-            printf("Updating object: %p, isAlive: %d\n", obj, obj->isAlive);
-        }
-        else
-        {
-            printf("Found null object in gameObjects vector.\n");
-        }
         if (!obj)
         {
             gameObjects.erase(gameObjects.begin() + i);
@@ -71,14 +62,14 @@ void Scene::render()
     }
 }
 
-void Scene::spawnBullet(b2Vec2 pos, b2Rot rot)
+void Scene::spawnBullet(Vector2 pos, float rot)
 {
-    Bullet *b = new Bullet(world, pos, rot, textureManager);
+    Bullet *b = new Bullet(pos, rot, textureManager);
     gameObjects.push_back(b);
 }
 
-void Scene::spawnTank(b2Vec2 pos)
+void Scene::spawnTank(Vector2 pos)
 {
-    Tank *tank = new Tank(world, pos, textureManager);
+    Tank *tank = new Tank(pos, textureManager);
     gameObjects.push_back(tank);
 }

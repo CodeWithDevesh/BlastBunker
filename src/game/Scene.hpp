@@ -1,6 +1,5 @@
 #pragma once
 #include <raylib.h>
-#include "box2d/box2d.h"
 #include "Tank.hpp"
 #include "Bullet.hpp"
 #include "Constants.hpp"
@@ -10,15 +9,14 @@
 class Scene
 {
 public:
-    Scene(TextureManager *, b2WorldId);
+    Scene(TextureManager *);
     ~Scene();
-    void spawnBullet(b2Vec2 pos, b2Rot dir);
-    void spawnTank(b2Vec2 pos);
+    void spawnBullet(Vector2 pos, float dir);
+    void spawnTank(Vector2 pos);
     void update();
     void render();
 
 private:
     TextureManager *textureManager;
     std::vector<GameObject *> gameObjects;
-    b2WorldId world;
 };

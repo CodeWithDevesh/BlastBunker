@@ -1,5 +1,4 @@
 #pragma once
-#include <box2d/box2d.h>
 #include "raylib.h"
 #include "raymath.h"
 #include "TextureManager.hpp"
@@ -12,7 +11,7 @@ class Game;
 class Tank : public GameObject
 {
 public:
-    Tank(b2WorldId world, b2Vec2 position, TextureManager *textureManager);
+    Tank(Vector2 position, TextureManager *textureManager);
     void Update() override;
     void Draw() override;
 
@@ -47,6 +46,7 @@ private:
     bool firing = false;
 
     Vector2 bodyPos;
+    float bodyAngle = 0;
 
     bool moving = false;
 };

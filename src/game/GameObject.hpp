@@ -1,6 +1,5 @@
 #pragma once
 
-#include <box2d/box2d.h>
 #include "raylib.h"
 #include "raymath.h"
 #include "Constants.hpp"
@@ -16,6 +15,4 @@ public:
     void Destroy();
 
 protected:
-    b2BodyId m_body;
-    b2ShapeId m_shape;
 };

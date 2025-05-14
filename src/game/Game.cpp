@@ -4,12 +4,6 @@ Scene *Game::scene;
 
 Game::Game()
 {
-    b2SetLengthUnitsPerMeter(32);
-    b2WorldDef worldDef = b2DefaultWorldDef();
-    worldDef.gravity.x = 0;
-    worldDef.gravity.y = 0;
-    m_b2WorldId = b2CreateWorld(&worldDef);
-
     InitWindow(screenWidth, screenHeight, "BunkBlaster");
     SetTargetFPS(60);
     // ToggleFullscreen();
@@ -21,10 +15,10 @@ Game::Game()
 
     textureManager = new TextureManager();
 
-    scene = new Scene(textureManager, m_b2WorldId);
-    b2Vec2 pos;
-    pos.x = 0;
-    pos.y = 0;
+    scene = new Scene(textureManager);
+    Vector2 pos;
+    pos.x = 100;
+    pos.y = 100;
     scene->spawnTank(pos);
 }
 
@@ -36,7 +30,6 @@ Game::~Game()
         textureManager = nullptr;
     }
 
-    b2DestroyWorld(m_b2WorldId);
     CloseWindow();
 }
 
@@ -50,7 +43,6 @@ void Game::run()
         {
             accumalator -= fixedTimeStep;
             Update();
-            b2World_Step(m_b2WorldId, fixedTimeStep, 4);
         }
         Render();
     }
@@ -70,7 +62,7 @@ void Game::Render()
     EndDrawing();
 }
 
-void Game::spwanBullet(b2Vec2 pos, b2Rot dir)
+void Game::spwanBullet(Vector2 pos, float dir)
 {
     scene->spawnBullet(pos, dir);
 }
