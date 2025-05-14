@@ -1,8 +1,9 @@
 #include "Scene.hpp"
 
-Scene::Scene(TextureManager *manager)
+Scene::Scene(TextureManager *textureManager, InputManager* inputManager)
 {
-    textureManager = manager;
+    this->textureManager = textureManager;
+    this->inputManager = inputManager;
 }
 
 Scene::~Scene()
@@ -70,6 +71,6 @@ void Scene::spawnBullet(Vector2 pos, float rot)
 
 void Scene::spawnTank(Vector2 pos)
 {
-    Tank *tank = new Tank(pos, textureManager);
+    Tank *tank = new Tank(pos, textureManager, inputManager);
     gameObjects.push_back(tank);
 }

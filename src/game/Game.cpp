@@ -14,8 +14,9 @@ Game::Game()
     // SetMouseScale(1, 1);
 
     textureManager = new TextureManager();
+    inputManager = new InputManager();
 
-    scene = new Scene(textureManager);
+    scene = new Scene(textureManager, inputManager);
     Vector2 pos;
     pos.x = 100;
     pos.y = 100;
@@ -29,6 +30,11 @@ Game::~Game()
         delete (textureManager);
         textureManager = nullptr;
     }
+    if (inputManager)
+    {
+        delete (inputManager);
+        inputManager = nullptr;
+    }
 
     CloseWindow();
 }
@@ -38,7 +44,7 @@ void Game::run()
     while (!WindowShouldClose())
     {
         accumalator += GetFrameTime();
-
+        
         while (accumalator >= fixedTimeStep)
         {
             accumalator -= fixedTimeStep;
@@ -50,6 +56,7 @@ void Game::run()
 
 void Game::Update()
 {
+    inputManager->Update();
     scene->update();
 }
 

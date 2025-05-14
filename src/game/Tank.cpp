@@ -1,9 +1,11 @@
 #include "Tank.hpp"
 #include "Game.hpp"
 
-Tank::Tank(Vector2 pos, TextureManager *textureManager)
+Tank::Tank(Vector2 pos, TextureManager *textureManager, InputManager* InputManager)
 {
     // set the textures
+    m_inputManager = InputManager;
+
     m_bodyTexture = textureManager->getTexture(TEXTURE_TANK_GREEN_BODY);
     m_turretTexture = textureManager->getTexture(TEXTURE_TANK_GREEN_TURRET);
     bodyFrameWidth = m_bodyTexture.width / 2;
@@ -21,22 +23,22 @@ void Tank::Update()
     vel.x = 0;
     vel.y = 0;
 
-    if (IsKeyDown(KEY_W))
+    if (m_inputManager->shouldMoveUp())
         // force.y -= acc;
         vel.y = -1;
-    if (IsKeyDown(KEY_S))
+    if (m_inputManager->shouldMoveDown())
         vel.y = 1;
-    if (IsKeyDown(KEY_A))
+    if (m_inputManager->shouldMoveLeft())
         vel.x = -1;
-    if (IsKeyDown(KEY_D))
+    if (m_inputManager->shouldMoveRight())
         vel.x = 1;
 
-    if (IsKeyDown(KEY_LEFT) || IsKeyDown(KEY_N))
+    if (m_inputManager->shouldRotateLeft())
         turretAngle -= turretSensitivity;
-    if (IsKeyDown(KEY_RIGHT) || IsKeyDown(KEY_M))
+    if (m_inputManager->shouldRotateRight())
         turretAngle += turretSensitivity;
 
-    if (IsKeyDown(KEY_SPACE))
+    if (m_inputManager->shouldFire())
     {
         if (!firing)
         {

@@ -5,17 +5,20 @@
 #include "iostream"
 #include "Constants.hpp"
 #include "GameObject.hpp"
+#include "InputManager.hpp"
 
 class Game;
 
 class Tank : public GameObject
 {
 public:
-    Tank(Vector2 position, TextureManager *textureManager);
+    Tank(Vector2 position, TextureManager *textureManager, InputManager *inputManager);
     void Update() override;
     void Draw() override;
 
 private:
+    InputManager *m_inputManager;
+
     void updateAnimation();
     void fire();
 

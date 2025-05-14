@@ -6,6 +6,7 @@
 #include "TextureManager.hpp"
 #include <vector>
 #include "Scene.hpp"
+#include "InputManager.hpp"
 
 class Game
 {
@@ -25,4 +26,5 @@ private:
     float accumalator = 0;
 
     TextureManager *textureManager;
+    InputManager *inputManager;
 };
