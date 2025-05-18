@@ -1,10 +1,14 @@
 #include "Tank.hpp"
 #include "Game.hpp"
 
-Tank::Tank(Vector2 pos, TextureManager *textureManager, InputManager* InputManager)
+Tank::Tank(Vector2 pos, TextureManager *textureManager, InputManager *InputManager, TankType type, TankColor color)
 {
     // set the textures
     m_inputManager = InputManager;
+    
+    bodyPos = pos;
+    m_tankType = type;
+    m_tankColor = color;
 
     m_bodyTexture = textureManager->getTexture(TEXTURE_TANK_GREEN_BODY);
     m_turretTexture = textureManager->getTexture(TEXTURE_TANK_GREEN_TURRET);
@@ -23,27 +27,29 @@ void Tank::Update()
     vel.x = 0;
     vel.y = 0;
 
-    if (m_inputManager->shouldMoveUp())
-        // force.y -= acc;
-        vel.y = -1;
-    if (m_inputManager->shouldMoveDown())
-        vel.y = 1;
-    if (m_inputManager->shouldMoveLeft())
-        vel.x = -1;
-    if (m_inputManager->shouldMoveRight())
-        vel.x = 1;
-
-    if (m_inputManager->shouldRotateLeft())
-        turretAngle -= turretSensitivity;
-    if (m_inputManager->shouldRotateRight())
-        turretAngle += turretSensitivity;
-
-    if (m_inputManager->shouldFire())
+    if (m_tankType == TANK_PLAYER)
     {
-        if (!firing)
+        if (m_inputManager->shouldMoveUp())
+            vel.y = -1;
+        if (m_inputManager->shouldMoveDown())
+            vel.y = 1;
+        if (m_inputManager->shouldMoveLeft())
+            vel.x = -1;
+        if (m_inputManager->shouldMoveRight())
+            vel.x = 1;
+
+        if (m_inputManager->shouldRotateLeft())
+            turretAngle -= turretSensitivity;
+        if (m_inputManager->shouldRotateRight())
+            turretAngle += turretSensitivity;
+
+        if (m_inputManager->shouldFire())
         {
-            fire();
-            firing = true;
+            if (!firing)
+            {
+                fire();
+                firing = true;
+            }
         }
     }
     turretAngle = fmod(turretAngle, 360.0f);

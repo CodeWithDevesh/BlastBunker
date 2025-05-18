@@ -13,7 +13,7 @@ public:
     Scene(TextureManager *, InputManager *);
     ~Scene();
     void spawnBullet(Vector2 pos, float dir);
-    void spawnTank(Vector2 pos);
+    void spawnTank(Vector2 pos, TankType type = TANK_PLAYER, TankColor color = TANK_GREEN);
     void update();
     void render();
 

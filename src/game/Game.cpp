@@ -21,6 +21,10 @@ Game::Game()
     pos.x = 100;
     pos.y = 100;
     scene->spawnTank(pos);
+
+    pos.x = 400;
+    pos.y = 400;
+    scene->spawnTank(pos, TANK_ENEMY);
 }
 
 Game::~Game()

@@ -9,15 +9,32 @@
 
 class Game;
 
+enum TankType
+{
+    TANK_PLAYER,
+    TANK_ENEMY,
+};
+enum TankColor
+{
+    TANK_GREEN,
+    TANK_RED,
+    TANK_BLUE,
+    TANK_YELLOW,
+};
+
 class Tank : public GameObject
 {
 public:
-    Tank(Vector2 position, TextureManager *textureManager, InputManager *inputManager);
+    Tank(Vector2 position, TextureManager *textureManager, InputManager *inputManager, TankType type = TANK_PLAYER, TankColor color = TANK_GREEN);
     void Update() override;
     void Draw() override;
 
 private:
+
     InputManager *m_inputManager;
+
+    TankType m_tankType = TANK_PLAYER;
+    TankColor m_tankColor = TANK_GREEN;
 
     void updateAnimation();
     void fire();

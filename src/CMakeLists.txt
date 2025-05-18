@@ -1,11 +1,4 @@
 file(GLOB_RECURSE SOURCES "*.cpp")
 
-
-find_package(Raylib REQUIRED)
-
-add_library(game STATIC ${SOURCES})
-target_include_directories(game PUBLIC ../include ${RAYLIB_INCLUDE_DIRS})
-target_link_libraries(game raylib ${RAYLIB_LIBRARIES})
-
-add_executable(blastbunker main.cpp)
-target_link_libraries(blastbunker game)
+add_executable(bunkblaster ${SOURCES})
+target_link_libraries(bunkblaster raylib box2d)

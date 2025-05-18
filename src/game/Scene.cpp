@@ -69,8 +69,8 @@ void Scene::spawnBullet(Vector2 pos, float rot)
     gameObjects.push_back(b);
 }
 
-void Scene::spawnTank(Vector2 pos)
+void Scene::spawnTank(Vector2 pos, TankType type, TankColor color)
 {
-    Tank *tank = new Tank(pos, textureManager, inputManager);
+    Tank *tank = new Tank(pos, textureManager, inputManager, type, color);
     gameObjects.push_back(tank);
 }
