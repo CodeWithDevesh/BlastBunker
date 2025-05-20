@@ -10,15 +10,16 @@
 class Scene
 {
 public:
-    Scene(TextureManager *, InputManager *);
+    Scene(TextureManager *, InputManager *, b2WorldId worldId);
     ~Scene();
-    void spawnBullet(Vector2 pos, float dir);
-    void spawnTank(Vector2 pos, TankType type = TANK_PLAYER, TankColor color = TANK_GREEN);
+    void spawnBullet(b2Vec2 pos, float dir);
+    void spawnTank(b2Vec2 pos, TankType type = TANK_PLAYER, TankColor color = TANK_GREEN);
     void update();
     void render();
 
 private:
     TextureManager *textureManager;
     InputManager *inputManager;
+    b2WorldId m_worldId;
     std::vector<GameObject *> gameObjects;
 };

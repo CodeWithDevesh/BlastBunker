@@ -4,6 +4,9 @@ project(TankArena)
 set(CMAKE_CXX_STANDARD 17)
 include(FetchContent)
 
+set_property(GLOBAL PROPERTY USE_FOLDERS ON)
+
+
 FetchContent_Declare(
 	box2d
 	GIT_REPOSITORY https://github.com/erincatto/box2d.git
@@ -22,4 +25,21 @@ FetchContent_Declare(
 )
 FetchContent_MakeAvailable(raylib)
 
-add_subdirectory(src)
+file(GLOB_RECURSE SOURCES "src/*.cpp")
+
+add_executable(bunkblaster ${SOURCES})
+target_link_libraries(bunkblaster PRIVATE box2d raylib)
+
+
+if (MSVC)
+	set_property(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} PROPERTY VS_STARTUP_PROJECT bunkblaster)
+	set_property(TARGET bunkblaster PROPERTY VS_DEBUGGER_WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}")
+endif()	
+
+if (EMSCRIPTEN)
+	set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Os")    
+	# Since WASM is used, ALLOW_MEMORY_GROWTH has no extra overheads
+	#set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -sWASM=1 -sASYNCIFY -sALLOW_MEMORY_GROWTH=1 --shell-file ${CMAKE_SOURCE_DIR}/minshell.html")
+	set(CMAKE_EXECUTABLE_SUFFIX ".html")
+	target_link_options(bunkblaster PROPERTIES LINK_FLAGS "--preload-file images@images -sWASM=1 -sASYNCIFY -sALLOW_MEMORY_GROWTH=1 --shell-file ${CMAKE_SOURCE_DIR}/minshell.html")
+endif()

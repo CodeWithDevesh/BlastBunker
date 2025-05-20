@@ -21,8 +21,8 @@ class TextureManager{
     private:
         Texture2D m_textures[3];
         const char* m_texturePaths[3] = {
-            "assets/bunker_body_green.png",
-            "assets/bunker_turret_green.png",
-            "assets/bullet.png"
+            "../assets/bunker_body_green.png",
+            "../assets/bunker_turret_green.png",
+            "../assets/bullet.png"
         };
 };
