@@ -25,8 +25,8 @@ Game::Game()
 
     scene = new Scene(textureManager, inputManager, m_worldId);
     b2Vec2 pos;
-    pos.x = 0;
-    pos.y = 0;
+    pos.x = 100;
+    pos.y = 100;
     scene->spawnTank(pos);
 
     pos.x = 400;
@@ -81,8 +81,8 @@ void Game::Update()
 void Game::Render()
 {
     BeginDrawing();
-    ClearBackground(YELLOW);
-    DrawFPS(10, 10);
+    ClearBackground(BLACK);
+    // DrawFPS(10, 10);
     scene->render();
     EndDrawing();
 }

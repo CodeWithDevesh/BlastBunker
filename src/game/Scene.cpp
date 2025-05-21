@@ -5,6 +5,7 @@ Scene::Scene(TextureManager *textureManager, InputManager *inputManager, b2World
     this->textureManager = textureManager;
     this->inputManager = inputManager;
     m_worldId = worldId;
+    backgroundTexture = textureManager->getTexture(TEXTURE_SAND);
 }
 
 Scene::~Scene()
@@ -18,6 +19,7 @@ Scene::~Scene()
 
 void Scene::update()
 {
+
     for (int i = 0; i < gameObjects.size();)
     {
         GameObject *obj = gameObjects[i];
@@ -42,6 +44,14 @@ void Scene::update()
 
 void Scene::render()
 {
+    printf("Height: %d, Width: %d\n", GetScreenHeight(), GetScreenWidth());
+    for (int y = 0; y < GetScreenHeight(); y += backgroundTexture.height)
+    {
+        for (int x = 0; x < GetScreenWidth(); x += backgroundTexture.width)
+        {
+            DrawTexture(backgroundTexture, x, y, WHITE);
+        }
+    }
     for (auto it = gameObjects.begin(); it != gameObjects.end();)
     {
         GameObject *obj = *it;

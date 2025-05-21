@@ -22,4 +22,5 @@ private:
     InputManager *inputManager;
     b2WorldId m_worldId;
     std::vector<GameObject *> gameObjects;
+    Texture2D backgroundTexture;
 };

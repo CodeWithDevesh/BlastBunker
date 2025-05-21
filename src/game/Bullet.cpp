@@ -20,6 +20,7 @@ Bullet::Bullet(b2WorldId worldId, b2Vec2 position, float rot, TextureManager *te
     bodyDef.position = {bodyPos.x, bodyPos.y};
     bodyDef.fixedRotation = true;
     bodyDef.rotation = b2MakeRot(rot);
+    // bodyDef.linearDamping = 1.5f;
     bodyDef.linearVelocity = {sinf(rot) * speed, cosf(rot) * speed};
     m_bodyId = b2CreateBody(worldId, &bodyDef);
 

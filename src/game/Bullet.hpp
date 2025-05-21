@@ -19,6 +19,6 @@ private:
     float frameWidth, frameHeight;
     Rectangle frameRec;
 
-    float speed = 500.f;
+    float speed = 1000.f;
     float scale = .3f;
 };
