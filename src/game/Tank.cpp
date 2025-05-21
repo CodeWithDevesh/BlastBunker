@@ -9,6 +9,11 @@ Tank::Tank(b2WorldId worldId, b2Vec2 pos, TextureManager *textureManager, InputM
     m_tankType = type;
     m_tankColor = color;
 
+    if (type == TANK_ENEMY)
+    {
+        healthBarColor = RED;
+    }
+
     m_bodyTexture = textureManager->getTexture(TEXTURE_TANK_GREEN_BODY);
     m_turretTexture = textureManager->getTexture(TEXTURE_TANK_GREEN_TURRET);
     bodyFrameWidth = m_bodyTexture.width / 2;
@@ -117,6 +122,9 @@ void Tank::Update()
     bodyPos = b2Body_GetPosition(m_bodyId);
     bodyPos.y = screenHeight - bodyPos.y;
     bodyAngle = -b2Rot_GetAngle(b2Body_GetRotation(m_bodyId)) * RAD2DEG;
+
+    healthBarX = bodyPos.x - healthBarWidth / 2;
+    healthBarY = bodyPos.y + bodyFrameHeight / 2 + turretFrameHeight / 2;
 }
 
 void Tank::Draw()
@@ -129,10 +137,14 @@ void Tank::Draw()
     // Draw the body of tank
     DrawTexturePro(m_bodyTexture, bodyFrameRec, {bodyPos.x, bodyPos.y, (float)bodyFrameWidth, (float)bodyFrameHeight}, {(float)bodyFrameWidth / 2, (float)bodyFrameHeight / 2}, bodyAngle, WHITE);
 
+    // Background of the health bar
+    DrawRectangle(healthBarX, healthBarY, healthBarWidth, healthBarHeight, GRAY);
+    // Foreground of the health bar (based on health percentage)
+    float healthPercentage = (float)health / maxHealth;
+    DrawRectangle(healthBarX, healthBarY, healthBarWidth * healthPercentage, healthBarHeight, healthBarColor);
+
     // Draw the turret
     DrawTexturePro(m_turretTexture, turretFrameRec, {bodyPos.x, bodyPos.y, (float)turretFrameWidth, (float)turretFrameHeight}, {(float)turretFrameWidth / 2, (float)turretFrameHeight - turretOffset}, turretAngle, WHITE);
-
-    // DrawDebug();
 }
 
 void Tank::updateAnimation()
@@ -167,6 +179,11 @@ void Tank::fire()
     p.x += sinf(turretAngle * DEG2RAD) * turretFrameHeight;
     p.y += cosf(turretAngle * DEG2RAD) * turretFrameHeight;
     Game::spwanBullet(p, turretAngle * DEG2RAD);
+
+    b2Vec2 imp = {sinf((180 + turretAngle) * DEG2RAD), cosf((180 + turretAngle) * DEG2RAD)};
+    imp = b2MulSV(recolingForce, b2Normalize(imp));
+
+    b2Body_ApplyLinearImpulseToCenter(m_bodyId, imp, true);
 }
 
 void Tank::DrawDebug()
@@ -195,15 +212,21 @@ float Tank::shortestAngleDiff(float a, float b)
     return diff - B2_PI;
 }
 
-
 void Tank::OnCollision(GameObject *other)
 {
     if (other == this)
         return;
-    if (other->objectType == GAME_OBJECT_BULLET){
+    if (other->objectType == GAME_OBJECT_BULLET)
+    {
         printf("Tank collided with bullet\n");
-        Destroy();
-    }else{
+        health--;
+        if (health <= 0)
+        {
+            Destroy();
+        }
+    }
+    else
+    {
         printf("Tank collided with %d\n", other->objectType);
     }
 }
