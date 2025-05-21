@@ -48,7 +48,7 @@ public:
     
     float maxForce = 12000.0f;
     float maxVel = 200.f;
-    float recolingForce = 100000.f;
+    float recolingForce = 50000.f;
     
     float turretSensitivity = 2;
     float turretAngle = 0;
