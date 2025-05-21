@@ -12,6 +12,8 @@ public:
     ~Bullet();
     void Update() override;
     void Draw() override;
+    void OnCollision(GameObject *other) override;
+
 
 private:
     Texture2D m_bodyTexture;

@@ -20,6 +20,16 @@ Scene::~Scene()
 void Scene::update()
 {
 
+    m_contactEvents = b2World_GetContactEvents(m_worldId);
+    for (int i = 0; i < m_contactEvents.beginCount; i++)
+    {
+        b2ContactBeginTouchEvent *event = &m_contactEvents.beginEvents[i];
+        GameObject *objA = (GameObject *)b2Body_GetUserData(b2Shape_GetBody(event->shapeIdA));
+        GameObject *objB = (GameObject *)b2Body_GetUserData(b2Shape_GetBody(event->shapeIdB));
+        objA->OnCollision(objB);
+        objB->OnCollision(objA);
+    }
+
     for (int i = 0; i < gameObjects.size();)
     {
         GameObject *obj = gameObjects[i];
@@ -44,7 +54,6 @@ void Scene::update()
 
 void Scene::render()
 {
-    printf("Height: %d, Width: %d\n", GetScreenHeight(), GetScreenWidth());
     for (int y = 0; y < GetScreenHeight(); y += backgroundTexture.height)
     {
         for (int x = 0; x < GetScreenWidth(); x += backgroundTexture.width)

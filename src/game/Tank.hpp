@@ -31,6 +31,7 @@ public:
     ~Tank();
     void Update() override;
     void Draw() override;
+    void OnCollision(GameObject *other) override;
 
 private:
     InputManager *m_inputManager;

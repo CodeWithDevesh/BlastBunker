@@ -23,4 +23,6 @@ private:
     b2WorldId m_worldId;
     std::vector<GameObject *> gameObjects;
     Texture2D backgroundTexture;
+    b2ContactEvents m_contactEvents;
+    b2ContactBeginTouchEvent* m_contactBeginTouchEvents;
 };

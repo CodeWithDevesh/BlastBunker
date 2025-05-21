@@ -24,11 +24,15 @@ Tank::Tank(b2WorldId worldId, b2Vec2 pos, TextureManager *textureManager, InputM
     bodyDef.position = {bodyPos.x, bodyPos.y};
     bodyDef.linearDamping = 2;
     bodyDef.angularDamping = 1;
+    bodyDef.userData = this;
     m_bodyId = b2CreateBody(worldId, &bodyDef);
 
     b2Polygon box = b2MakeBox(bodyFrameWidth / 2, bodyFrameHeight / 2);
     b2ShapeDef shapeDef = b2DefaultShapeDef();
+    shapeDef.enableContactEvents = true;
     b2CreatePolygonShape(m_bodyId, &shapeDef, &box);
+
+    objectType = GAME_OBJECT_TANK;
 }
 
 Tank::~Tank()
@@ -38,6 +42,9 @@ Tank::~Tank()
 
 void Tank::Update()
 {
+    if (!isAlive)
+        return;
+
     b2Vec2 force = {0, 0};
     moving = false;
     if (m_tankType == TANK_PLAYER)
@@ -114,6 +121,9 @@ void Tank::Update()
 
 void Tank::Draw()
 {
+    if (!isAlive)
+        return;
+
     updateAnimation();
 
     // Draw the body of tank
@@ -183,4 +193,17 @@ float Tank::shortestAngleDiff(float a, float b)
     if (diff < 0)
         diff += 2.0f * B2_PI;
     return diff - B2_PI;
+}
+
+
+void Tank::OnCollision(GameObject *other)
+{
+    if (other == this)
+        return;
+    if (other->objectType == GAME_OBJECT_BULLET){
+        printf("Tank collided with bullet\n");
+        Destroy();
+    }else{
+        printf("Tank collided with %d\n", other->objectType);
+    }
 }
