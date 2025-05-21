@@ -1,9 +1,7 @@
 #pragma once
 #include <raylib.h>
-#include "Tank.hpp"
-#include "Bullet.hpp"
 #include "Constants.hpp"
-#include "TextureManager.hpp"
+#include "AssetManager.hpp"
 #include <vector>
 #include "Scene.hpp"
 #include "InputManager.hpp"
@@ -27,7 +25,7 @@ private:
 
     float accumalator = 0;
 
-    TextureManager *textureManager;
+    AssetManager *textureManager;
     InputManager *inputManager;
     b2WorldId m_worldId;
 };

@@ -1,7 +1,7 @@
 #pragma once
 #include "raylib.h"
 #include "raymath.h"
-#include "TextureManager.hpp"
+#include "AssetManager.hpp"
 #include "iostream"
 #include "Constants.hpp"
 #include "GameObject.hpp"
@@ -27,7 +27,7 @@ enum TankColor
 class Tank : public GameObject
 {
 public:
-    Tank(b2WorldId worldId, b2Vec2 position, TextureManager *textureManager, InputManager *inputManager, TankType type = TANK_PLAYER, TankColor color = TANK_GREEN);
+    Tank(b2WorldId worldId, b2Vec2 position, AssetManager *textureManager, InputManager *inputManager, TankType type = TANK_PLAYER, TankColor color = TANK_GREEN);
     ~Tank();
     void Update() override;
     void Draw() override;

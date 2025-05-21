@@ -3,12 +3,12 @@
 #include "raylib.h"
 #include "raymath.h"
 #include "GameObject.hpp"
-#include "TextureManager.hpp"
+#include "AssetManager.hpp"
 
 class Bullet : public GameObject
 {
 public:
-    Bullet(b2WorldId worldId, b2Vec2 position, float rot, TextureManager *textureManager);
+    Bullet(b2WorldId worldId, b2Vec2 position, float rot, AssetManager *textureManager);
     ~Bullet();
     void Update() override;
     void Draw() override;

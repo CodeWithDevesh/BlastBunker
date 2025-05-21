@@ -1,6 +1,6 @@
 #include "Scene.hpp"
 
-Scene::Scene(TextureManager *textureManager, InputManager *inputManager, b2WorldId worldId)
+Scene::Scene(AssetManager *textureManager, InputManager *inputManager, b2WorldId worldId)
 {
     this->textureManager = textureManager;
     this->inputManager = inputManager;

@@ -20,7 +20,7 @@ Game::Game()
     m_worldId = b2CreateWorld(&worldDef);
     
 
-    textureManager = new TextureManager();
+    textureManager = new AssetManager();
     inputManager = new InputManager();
 
     scene = new Scene(textureManager, inputManager, m_worldId);

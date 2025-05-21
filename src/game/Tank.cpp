@@ -1,7 +1,7 @@
 #include "Tank.hpp"
 #include "Game.hpp"
 
-Tank::Tank(b2WorldId worldId, b2Vec2 pos, TextureManager *textureManager, InputManager *InputManager, TankType type, TankColor color)
+Tank::Tank(b2WorldId worldId, b2Vec2 pos, AssetManager *textureManager, InputManager *InputManager, TankType type, TankColor color)
 {
     m_inputManager = InputManager;
 

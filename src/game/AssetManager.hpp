@@ -13,11 +13,11 @@ enum TextureType
     TEXTURE_SAND,
 };
 
-class TextureManager{
+class AssetManager{
 
     public:
-        TextureManager();
-        ~TextureManager();
+        AssetManager();
+        ~AssetManager();
 
         Texture2D getTexture(TextureType type);
 

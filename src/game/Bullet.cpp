@@ -1,6 +1,6 @@
 #include "Bullet.hpp"
 
-Bullet::Bullet(b2WorldId worldId, b2Vec2 position, float rot, TextureManager *textureManager)
+Bullet::Bullet(b2WorldId worldId, b2Vec2 position, float rot, AssetManager *textureManager)
 {
     m_bodyTexture = textureManager->getTexture(TEXTURE_BULLET);
     frameWidth = (float)m_bodyTexture.width;
