@@ -1,10 +1,13 @@
 #include "Tank.hpp"
 #include "Game.hpp"
 
-Tank::Tank(Vector2 pos, TextureManager *textureManager, InputManager* InputManager)
+Tank::Tank(b2WorldId worldId, b2Vec2 pos, TextureManager *textureManager, InputManager *InputManager, TankType type, TankColor color)
 {
-    // set the textures
     m_inputManager = InputManager;
+
+    bodyPos = pos;
+    m_tankType = type;
+    m_tankColor = color;
 
     m_bodyTexture = textureManager->getTexture(TEXTURE_TANK_GREEN_BODY);
     m_turretTexture = textureManager->getTexture(TEXTURE_TANK_GREEN_TURRET);
@@ -15,65 +18,125 @@ Tank::Tank(Vector2 pos, TextureManager *textureManager, InputManager* InputManag
 
     bodyFrameRec = {0, 0, (float)bodyFrameWidth, (float)bodyFrameHeight};
     turretFrameRec = {0, 0, (float)turretFrameWidth, (float)turretFrameHeight};
+
+    b2BodyDef bodyDef = b2DefaultBodyDef();
+    bodyDef.type = b2_dynamicBody;
+    bodyDef.position = {bodyPos.x, bodyPos.y};
+    bodyDef.linearDamping = 2;
+    bodyDef.angularDamping = 1;
+    bodyDef.userData = this;
+    m_bodyId = b2CreateBody(worldId, &bodyDef);
+
+    b2Polygon box = b2MakeBox(bodyFrameWidth / 2, bodyFrameHeight / 2);
+    b2ShapeDef shapeDef = b2DefaultShapeDef();
+    shapeDef.enableContactEvents = true;
+    b2CreatePolygonShape(m_bodyId, &shapeDef, &box);
+
+    objectType = GAME_OBJECT_TANK;
+}
+
+Tank::~Tank()
+{
+    Destroy();
 }
 
 void Tank::Update()
 {
-    Vector2 vel;
-    vel.x = 0;
-    vel.y = 0;
+    if (!isAlive)
+        return;
 
-    if (m_inputManager->shouldMoveUp())
-        // force.y -= acc;
-        vel.y = -1;
-    if (m_inputManager->shouldMoveDown())
-        vel.y = 1;
-    if (m_inputManager->shouldMoveLeft())
-        vel.x = -1;
-    if (m_inputManager->shouldMoveRight())
-        vel.x = 1;
-
-    if (m_inputManager->shouldRotateLeft())
-        turretAngle -= turretSensitivity;
-    if (m_inputManager->shouldRotateRight())
-        turretAngle += turretSensitivity;
-
-    if (m_inputManager->shouldFire())
+    b2Vec2 force = {0, 0};
+    moving = false;
+    if (m_tankType == TANK_PLAYER)
     {
-        if (!firing)
+        if (m_inputManager->shouldMoveUp())
         {
-            fire();
-            firing = true;
+            force.y = 1;
+            moving = true;
+        }
+        if (m_inputManager->shouldMoveDown())
+        {
+            force.y = -1;
+            moving = true;
+        }
+        if (m_inputManager->shouldMoveLeft())
+        {
+            force.x = -1;
+            moving = true;
+        }
+        if (m_inputManager->shouldMoveRight())
+        {
+            force.x = 1;
+            moving = true;
+        }
+        force = b2MulSV(maxForce, b2Normalize(force));
+        if (m_inputManager->shouldRotateLeft())
+            turretAngle -= turretSensitivity;
+        if (m_inputManager->shouldRotateRight())
+            turretAngle += turretSensitivity;
+
+        if (m_inputManager->shouldFire())
+        {
+            if (!firing)
+            {
+                fire();
+                firing = true;
+            }
         }
     }
     turretAngle = fmod(turretAngle, 360.0f);
-
-    vel = Vector2Multiply(Vector2Normalize(vel), {maxVel, maxVel});
-    if (fabs(vel.x) > 0.01f || fabs(vel.y) > 0.01f)
+    b2Body_ApplyLinearImpulseToCenter(m_bodyId, force, true);
+    b2Vec2 vel = b2Body_GetLinearVelocity(m_bodyId);
+    // vel = b2Mul(b2Normalize(vel), {maxVel, maxVel});
+    if (moving)
     {
-        moving = true;
-        bodyAngle = atan2(vel.x, -vel.y); // Radians!
-        bodyPos.x += vel.x * fixedTimeStep;
-        bodyPos.y += vel.y * fixedTimeStep;
+        float currentAngle = b2Rot_GetAngle(b2Body_GetRotation(m_bodyId));
+        float targetAngle = atan2(vel.x, -vel.y);
+        float angleDiff = shortestAngleDiff(targetAngle, currentAngle);
+        float angleThreshold = 0.01f;
+
+        if (fabsf(angleDiff) < angleThreshold)
+        {
+            b2Body_SetAngularVelocity(m_bodyId, 0);
+        }
+        else
+        {
+            float turnSpeed = 2.0f;
+            b2Body_SetAngularVelocity(m_bodyId, angleDiff > 0 ? turnSpeed : -turnSpeed);
+        }
     }
-    else
-        moving = false;
+
+    b2Vec2 currentRightNormal = b2Body_GetWorldVector(m_bodyId, {1, 0}); // Right direction of tank
+    b2Vec2 lateralVelocity = b2Dot(currentRightNormal, b2Body_GetLinearVelocity(m_bodyId)) * currentRightNormal;
+
+    float driftControl = 0.2f;
+
+    b2Vec2 impulse = -lateralVelocity * b2Body_GetMass(m_bodyId) * driftControl;
+    b2Body_ApplyLinearImpulse(m_bodyId, impulse, b2Body_GetWorldCenterOfMass(m_bodyId), true);
+
+    bodyPos = b2Body_GetPosition(m_bodyId);
+    bodyPos.y = screenHeight - bodyPos.y;
+    bodyAngle = -b2Rot_GetAngle(b2Body_GetRotation(m_bodyId)) * RAD2DEG;
 }
 
 void Tank::Draw()
 {
+    if (!isAlive)
+        return;
+
     updateAnimation();
 
     // Draw the body of tank
-    DrawTexturePro(m_bodyTexture, bodyFrameRec, {bodyPos.x, bodyPos.y, (float)bodyFrameWidth, (float)bodyFrameHeight}, {(float)bodyFrameWidth / 2, (float)bodyFrameHeight / 2}, bodyAngle * RAD2DEG, WHITE);
+    DrawTexturePro(m_bodyTexture, bodyFrameRec, {bodyPos.x, bodyPos.y, (float)bodyFrameWidth, (float)bodyFrameHeight}, {(float)bodyFrameWidth / 2, (float)bodyFrameHeight / 2}, bodyAngle, WHITE);
 
     // Draw the turret
     DrawTexturePro(m_turretTexture, turretFrameRec, {bodyPos.x, bodyPos.y, (float)turretFrameWidth, (float)turretFrameHeight}, {(float)turretFrameWidth / 2, (float)turretFrameHeight - turretOffset}, turretAngle, WHITE);
+
+    // DrawDebug();
 }
 
 void Tank::updateAnimation()
 {
-
     if (moving)
         bodyTimer += GetFrameTime();
     if (bodyTimer >= bodyFrameTime)
@@ -100,8 +163,47 @@ void Tank::updateAnimation()
 
 void Tank::fire()
 {
-    Vector2 p = bodyPos;
-    p.x += sinf(turretAngle * DEG2RAD) * turretFrameHeight / 1.2;
-    p.y += -cosf(turretAngle * DEG2RAD) * turretFrameHeight / 1.2;
+    b2Vec2 p = b2Body_GetPosition(m_bodyId);
+    p.x += sinf(turretAngle * DEG2RAD) * turretFrameHeight;
+    p.y += cosf(turretAngle * DEG2RAD) * turretFrameHeight;
     Game::spwanBullet(p, turretAngle * DEG2RAD);
+}
+
+void Tank::DrawDebug()
+{
+    b2Vec2 pos = b2Body_GetPosition(m_bodyId);
+    float angle = b2Rot_GetAngle(b2Body_GetRotation(m_bodyId));
+
+    // Draw the collision shape as a rectangle
+    DrawRectanglePro(
+        {pos.x, screenHeight - pos.y, (float)bodyFrameWidth, (float)bodyFrameHeight},
+        {(float)bodyFrameWidth / 2, (float)bodyFrameHeight / 2},
+        -bodyAngle,
+        BLUE);
+    DrawRectanglePro(
+        {pos.x, pos.y, (float)bodyFrameWidth, (float)bodyFrameHeight},
+        {(float)bodyFrameWidth / 2, (float)bodyFrameHeight / 2},
+        bodyAngle,
+        RED);
+}
+
+float Tank::shortestAngleDiff(float a, float b)
+{
+    float diff = fmodf(a - b + B2_PI, 2.0f * B2_PI);
+    if (diff < 0)
+        diff += 2.0f * B2_PI;
+    return diff - B2_PI;
+}
+
+
+void Tank::OnCollision(GameObject *other)
+{
+    if (other == this)
+        return;
+    if (other->objectType == GAME_OBJECT_BULLET){
+        printf("Tank collided with bullet\n");
+        Destroy();
+    }else{
+        printf("Tank collided with %d\n", other->objectType);
+    }
 }

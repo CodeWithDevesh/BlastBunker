@@ -8,6 +8,8 @@
 #include "Scene.hpp"
 #include "InputManager.hpp"
 
+#include "box2d/box2d.h"
+
 class Game
 {
 private:
@@ -15,7 +17,7 @@ public:
     Game(/* args */);
     void run();
     ~Game();
-    static void spwanBullet(Vector2 pos, float dir);
+    static void spwanBullet(b2Vec2 pos, float dir);
 
 private:
     void Update();
@@ -27,4 +29,5 @@ private:
 
     TextureManager *textureManager;
     InputManager *inputManager;
+    b2WorldId m_worldId;
 };

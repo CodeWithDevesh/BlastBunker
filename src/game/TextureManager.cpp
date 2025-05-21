@@ -2,14 +2,16 @@
 
 TextureManager::TextureManager()
 {
-    for (int i = 0; i < 3; i++)
+    int n = sizeof(m_textures) / sizeof(m_textures[0]);
+    for (int i = 0; i < n; i++)
     {
         m_textures[i] = LoadTexture(m_texturePaths[i]);
     }
 }
 TextureManager::~TextureManager()
 {
-    for (int i = 0; i < 3; i++)
+    int n = sizeof(m_textures) / sizeof(m_textures[0]);
+    for (int i = 0; i < n; i++)
     {
         UnloadTexture(m_textures[i]);
     }

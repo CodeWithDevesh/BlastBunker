@@ -1,9 +1,11 @@
 #include "Scene.hpp"
 
-Scene::Scene(TextureManager *textureManager, InputManager* inputManager)
+Scene::Scene(TextureManager *textureManager, InputManager *inputManager, b2WorldId worldId)
 {
     this->textureManager = textureManager;
     this->inputManager = inputManager;
+    m_worldId = worldId;
+    backgroundTexture = textureManager->getTexture(TEXTURE_SAND);
 }
 
 Scene::~Scene()
@@ -17,7 +19,17 @@ Scene::~Scene()
 
 void Scene::update()
 {
-    printf("%d\n", gameObjects.size());
+
+    m_contactEvents = b2World_GetContactEvents(m_worldId);
+    for (int i = 0; i < m_contactEvents.beginCount; i++)
+    {
+        b2ContactBeginTouchEvent *event = &m_contactEvents.beginEvents[i];
+        GameObject *objA = (GameObject *)b2Body_GetUserData(b2Shape_GetBody(event->shapeIdA));
+        GameObject *objB = (GameObject *)b2Body_GetUserData(b2Shape_GetBody(event->shapeIdB));
+        objA->OnCollision(objB);
+        objB->OnCollision(objA);
+    }
+
     for (int i = 0; i < gameObjects.size();)
     {
         GameObject *obj = gameObjects[i];
@@ -42,6 +54,13 @@ void Scene::update()
 
 void Scene::render()
 {
+    for (int y = 0; y < GetScreenHeight(); y += backgroundTexture.height)
+    {
+        for (int x = 0; x < GetScreenWidth(); x += backgroundTexture.width)
+        {
+            DrawTexture(backgroundTexture, x, y, WHITE);
+        }
+    }
     for (auto it = gameObjects.begin(); it != gameObjects.end();)
     {
         GameObject *obj = *it;
@@ -63,14 +82,14 @@ void Scene::render()
     }
 }
 
-void Scene::spawnBullet(Vector2 pos, float rot)
+void Scene::spawnBullet(b2Vec2 pos, float rot)
 {
-    Bullet *b = new Bullet(pos, rot, textureManager);
+    Bullet *b = new Bullet(m_worldId, pos, rot, textureManager);
     gameObjects.push_back(b);
 }
 
-void Scene::spawnTank(Vector2 pos)
+void Scene::spawnTank(b2Vec2 pos, TankType type, TankColor color)
 {
-    Tank *tank = new Tank(pos, textureManager, inputManager);
+    Tank *tank = new Tank(m_worldId, pos, textureManager, inputManager, type, color);
     gameObjects.push_back(tank);
 }
