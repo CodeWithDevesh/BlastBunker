@@ -6,6 +6,8 @@
 // don't change the order of existing ones
 // And update the paths too
 
+#define FIRE_SOUND_COUNT 5
+
 enum TextureType
 {
     TEXTURE_TANK_GREEN_BODY,
@@ -19,6 +21,7 @@ enum TextureType
 enum SoundType
 {
     SOUND_EXPLOSION,
+    SOUND_PLAYER_FIRE,
     SOUND_COUNT, // Keep this at the end
 };
 
@@ -31,6 +34,8 @@ public:
 
     Texture2D getTexture(TextureType type);
     Sound getSound(SoundType type);
+    char *getTexturePath(TextureType type);
+    char *getSoundPath(SoundType type);
 
 private:
     Texture2D m_textures[TEXTURE_COUNT];
@@ -43,7 +48,11 @@ private:
     };
 
     Sound m_sounds[SOUND_COUNT];
+    Sound bulletSounds[FIRE_SOUND_COUNT];
     const char *m_soundPaths[SOUND_COUNT] = {
-        "../assets/boom.wav",
+        "../assets/explosion.wav",
+        "../assets/fire-player.wav",
     };
+
+    int currentFirePlayerSound = 0;
 };

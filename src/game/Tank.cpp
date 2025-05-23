@@ -18,6 +18,8 @@ Tank::Tank(b2Vec2 pos, TankType type, TankColor color)
 
     m_bodyTexture = Globals::GetAssetManager()->getTexture(TEXTURE_TANK_GREEN_BODY);
     m_turretTexture = Globals::GetAssetManager()->getTexture(TEXTURE_TANK_GREEN_TURRET);
+    m_playerFireSound = Globals::GetAssetManager()->getSound(SOUND_PLAYER_FIRE);
+
     bodyFrameWidth = m_bodyTexture.width / 2;
     bodyFrameHeight = m_bodyTexture.height;
     turretFrameWidth = m_turretTexture.width / 7;

@@ -54,6 +54,7 @@ public:
     
     Texture2D m_bodyTexture;
     Texture2D m_turretTexture;
+    Sound m_playerFireSound;
     
     int bodyFrameWidth, bodyFrameHeight;
     Rectangle bodyFrameRec;

@@ -33,6 +33,9 @@ Bullet::Bullet(b2Vec2 position, float rot)
     b2CreatePolygonShape(m_bodyId, &shapeDef, &box);
 
     objectType = GAME_OBJECT_BULLET;
+
+    m_playerFireSound = Globals::GetAssetManager()->getSound(SOUND_PLAYER_FIRE);
+    PlaySound(m_playerFireSound);
 }
 
 Bullet::~Bullet()

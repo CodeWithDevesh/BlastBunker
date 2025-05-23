@@ -21,6 +21,8 @@ private:
     float frameWidth, frameHeight;
     Rectangle frameRec;
 
+    Sound m_playerFireSound;
+
     float speed = 1000.f;
     float scale = .3f;
 };
