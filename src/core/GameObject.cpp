@@ -2,7 +2,7 @@
 
 void GameObject::Destroy()
 {
-    if (isAlive)
+    if (isAlive && bodyCreated)
         b2DestroyBody(m_bodyId);
     isAlive = false;
 }

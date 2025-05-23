@@ -10,6 +10,7 @@ enum GameObjectType
 {
     GAME_OBJECT_TANK,
     GAME_OBJECT_BULLET,
+    GAME_OBJECT_EXPLOSION,
 };
 
 class GameObject
@@ -18,16 +19,17 @@ public:
     bool isAlive = true;
     virtual void Update() = 0;
     virtual void Draw() = 0;
-    virtual void OnCollision(GameObject* other) {};
+    virtual void OnCollision(GameObject *other) {};
     virtual ~GameObject() {};
     void Destroy();
 
     GameObjectType objectType;
 
+protected:
     b2BodyId m_bodyId;
     b2WorldId m_worldId;
     b2Vec2 bodyPos;
     float bodyAngle = 0;
     float scale = 1.0f;
-protected:
+    bool bodyCreated = false;
 };

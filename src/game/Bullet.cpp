@@ -25,6 +25,7 @@ Bullet::Bullet(b2Vec2 position, float rot)
     // bodyDef.linearDamping = 1.5f;
     bodyDef.linearVelocity = {sinf(rot) * speed, cosf(rot) * speed};
     m_bodyId = b2CreateBody(Globals::GetWorldId(), &bodyDef);
+    bodyCreated = true;
 
     b2Polygon box = b2MakeBox(frameWidth / 2, frameHeight / 2);
     b2ShapeDef shapeDef = b2DefaultShapeDef();

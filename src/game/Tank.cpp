@@ -1,6 +1,7 @@
 #include "game/Tank.hpp"
 #include "core/Game.hpp"
 #include "core/Globals.hpp"
+#include "core/Scene.hpp"
 
 Tank::Tank(b2Vec2 pos, TankType type, TankColor color)
 {
@@ -32,6 +33,7 @@ Tank::Tank(b2Vec2 pos, TankType type, TankColor color)
     bodyDef.angularDamping = 1;
     bodyDef.userData = this;
     m_bodyId = b2CreateBody(Globals::GetWorldId(), &bodyDef);
+    bodyCreated = true;
 
     b2Polygon box = b2MakeBox(bodyFrameWidth / 2, bodyFrameHeight / 2);
     b2ShapeDef shapeDef = b2DefaultShapeDef();
@@ -223,6 +225,7 @@ void Tank::OnCollision(GameObject *other)
         health--;
         if (health <= 0)
         {
+            Scene::spawnExplosion(b2Body_GetPosition(m_bodyId));
             Destroy();
         }
     }

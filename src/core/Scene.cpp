@@ -1,6 +1,8 @@
 #include "core/Scene.hpp"
 #include "core/Globals.hpp"
 
+std::vector<GameObject *> Scene::gameObjects;
+
 Scene::Scene()
 {
     m_worldId = Globals::GetWorldId();
@@ -91,4 +93,10 @@ void Scene::spawnTank(b2Vec2 pos, TankType type, TankColor color)
 {
     Tank *tank = new Tank(pos, type, color);
     gameObjects.push_back(tank);
+}
+
+void Scene::spawnExplosion(b2Vec2 pos)
+{
+    Explosion *explosion = new Explosion(pos);
+    gameObjects.push_back(explosion);
 }

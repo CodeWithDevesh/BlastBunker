@@ -6,6 +6,7 @@ Scene *Game::scene;
 Game::Game()
 {
     InitWindow(screenWidth, screenHeight, "BunkBlaster");
+    InitAudioDevice();
     SetTargetFPS(60);
     // ToggleFullscreen();
     SetConfigFlags(FLAG_VSYNC_HINT | FLAG_WINDOW_UNDECORATED);
@@ -38,7 +39,7 @@ Game::~Game()
     }
 
     Globals::Shutdown();
-
+    CloseAudioDevice();
     CloseWindow();
 }
 
