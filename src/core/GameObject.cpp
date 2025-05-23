@@ -1,4 +1,4 @@
-#include "GameObject.hpp"
+#include "core/GameObject.hpp"
 
 void GameObject::Destroy()
 {

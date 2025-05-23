@@ -1,7 +1,7 @@
 #pragma once
 #include <raylib.h>
-#include "Tank.hpp"
-#include "Bullet.hpp"
+#include "game/Tank.hpp"
+#include "game/Bullet.hpp"
 #include "Constants.hpp"
 #include "AssetManager.hpp"
 #include "InputManager.hpp"

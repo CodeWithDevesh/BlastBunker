@@ -1,5 +1,5 @@
-#include "Tank.hpp"
-#include "Game.hpp"
+#include "game/Tank.hpp"
+#include "core/Game.hpp"
 
 Tank::Tank(b2WorldId worldId, b2Vec2 pos, AssetManager *textureManager, InputManager *InputManager, TankType type, TankColor color)
 {

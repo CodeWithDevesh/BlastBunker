@@ -1,4 +1,4 @@
-#include "Bullet.hpp"
+#include "game/Bullet.hpp"
 
 Bullet::Bullet(b2WorldId worldId, b2Vec2 position, float rot, AssetManager *textureManager)
 {

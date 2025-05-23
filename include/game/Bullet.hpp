@@ -2,8 +2,8 @@
 
 #include "raylib.h"
 #include "raymath.h"
-#include "GameObject.hpp"
-#include "AssetManager.hpp"
+#include "core/GameObject.hpp"
+#include "core/AssetManager.hpp"
 
 class Bullet : public GameObject
 {

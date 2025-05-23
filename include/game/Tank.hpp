@@ -1,11 +1,11 @@
 #pragma once
 #include "raylib.h"
 #include "raymath.h"
-#include "AssetManager.hpp"
+#include "core/AssetManager.hpp"
 #include "iostream"
-#include "Constants.hpp"
-#include "GameObject.hpp"
-#include "InputManager.hpp"
+#include "core/Constants.hpp"
+#include "core/GameObject.hpp"
+#include "core/InputManager.hpp"
 
 #include "box2d/box2d.h"
 

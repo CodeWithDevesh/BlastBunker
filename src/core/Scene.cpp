@@ -1,4 +1,4 @@
-#include "Scene.hpp"
+#include "core/Scene.hpp"
 
 Scene::Scene(AssetManager *textureManager, InputManager *inputManager, b2WorldId worldId)
 {
