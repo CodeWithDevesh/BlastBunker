@@ -1,9 +1,10 @@
 #include "game/Tank.hpp"
 #include "core/Game.hpp"
+#include "core/Globals.hpp"
 
-Tank::Tank(b2WorldId worldId, b2Vec2 pos, AssetManager *textureManager, InputManager *InputManager, TankType type, TankColor color)
+Tank::Tank(b2Vec2 pos, TankType type, TankColor color)
 {
-    m_inputManager = InputManager;
+    m_inputManager = Globals::GetInputManager();
 
     bodyPos = pos;
     m_tankType = type;
@@ -14,8 +15,8 @@ Tank::Tank(b2WorldId worldId, b2Vec2 pos, AssetManager *textureManager, InputMan
         healthBarColor = RED;
     }
 
-    m_bodyTexture = textureManager->getTexture(TEXTURE_TANK_GREEN_BODY);
-    m_turretTexture = textureManager->getTexture(TEXTURE_TANK_GREEN_TURRET);
+    m_bodyTexture = Globals::GetAssetManager()->getTexture(TEXTURE_TANK_GREEN_BODY);
+    m_turretTexture = Globals::GetAssetManager()->getTexture(TEXTURE_TANK_GREEN_TURRET);
     bodyFrameWidth = m_bodyTexture.width / 2;
     bodyFrameHeight = m_bodyTexture.height;
     turretFrameWidth = m_turretTexture.width / 7;
@@ -30,7 +31,7 @@ Tank::Tank(b2WorldId worldId, b2Vec2 pos, AssetManager *textureManager, InputMan
     bodyDef.linearDamping = 2;
     bodyDef.angularDamping = 1;
     bodyDef.userData = this;
-    m_bodyId = b2CreateBody(worldId, &bodyDef);
+    m_bodyId = b2CreateBody(Globals::GetWorldId(), &bodyDef);
 
     b2Polygon box = b2MakeBox(bodyFrameWidth / 2, bodyFrameHeight / 2);
     b2ShapeDef shapeDef = b2DefaultShapeDef();

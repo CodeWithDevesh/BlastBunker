@@ -1,7 +1,5 @@
 #pragma once
 #include <raylib.h>
-#include "Constants.hpp"
-#include "AssetManager.hpp"
 #include <vector>
 #include "Scene.hpp"
 #include "InputManager.hpp"
@@ -21,11 +19,12 @@ private:
     void Update();
     void Render();
 
+    b2WorldId m_worldId;
+
+    InputManager *m_inputManager;
+
     static Scene* scene;
 
     float accumalator = 0;
 
-    AssetManager *textureManager;
-    InputManager *inputManager;
-    b2WorldId m_worldId;
 };

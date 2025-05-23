@@ -1,11 +1,10 @@
 #include "core/Scene.hpp"
+#include "core/Globals.hpp"
 
-Scene::Scene(AssetManager *textureManager, InputManager *inputManager, b2WorldId worldId)
+Scene::Scene()
 {
-    this->textureManager = textureManager;
-    this->inputManager = inputManager;
-    m_worldId = worldId;
-    backgroundTexture = textureManager->getTexture(TEXTURE_SAND);
+    m_worldId = Globals::GetWorldId();
+    backgroundTexture = Globals::GetAssetManager()->getTexture(TEXTURE_SAND);
 }
 
 Scene::~Scene()
@@ -84,12 +83,12 @@ void Scene::render()
 
 void Scene::spawnBullet(b2Vec2 pos, float rot)
 {
-    Bullet *b = new Bullet(m_worldId, pos, rot, textureManager);
+    Bullet *b = new Bullet(pos, rot);
     gameObjects.push_back(b);
 }
 
 void Scene::spawnTank(b2Vec2 pos, TankType type, TankColor color)
 {
-    Tank *tank = new Tank(m_worldId, pos, textureManager, inputManager, type, color);
+    Tank *tank = new Tank(pos, type, color);
     gameObjects.push_back(tank);
 }

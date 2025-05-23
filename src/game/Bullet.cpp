@@ -1,8 +1,9 @@
 #include "game/Bullet.hpp"
+#include "core/Globals.hpp"
 
-Bullet::Bullet(b2WorldId worldId, b2Vec2 position, float rot, AssetManager *textureManager)
+Bullet::Bullet(b2Vec2 position, float rot)
 {
-    m_bodyTexture = textureManager->getTexture(TEXTURE_BULLET);
+    m_bodyTexture = Globals::GetAssetManager()->getTexture(TEXTURE_BULLET);
     frameWidth = (float)m_bodyTexture.width;
     frameHeight = (float)m_bodyTexture.height;
 
@@ -23,7 +24,7 @@ Bullet::Bullet(b2WorldId worldId, b2Vec2 position, float rot, AssetManager *text
     bodyDef.userData = this;
     // bodyDef.linearDamping = 1.5f;
     bodyDef.linearVelocity = {sinf(rot) * speed, cosf(rot) * speed};
-    m_bodyId = b2CreateBody(worldId, &bodyDef);
+    m_bodyId = b2CreateBody(Globals::GetWorldId(), &bodyDef);
 
     b2Polygon box = b2MakeBox(frameWidth / 2, frameHeight / 2);
     b2ShapeDef shapeDef = b2DefaultShapeDef();

@@ -8,7 +8,7 @@
 class Bullet : public GameObject
 {
 public:
-    Bullet(b2WorldId worldId, b2Vec2 position, float rot, AssetManager *textureManager);
+    Bullet(b2Vec2 position, float rot);
     ~Bullet();
     void Update() override;
     void Draw() override;

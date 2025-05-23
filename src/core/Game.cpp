@@ -1,4 +1,5 @@
 #include "core/Game.hpp"
+#include "core/Globals.hpp"
 
 Scene *Game::scene;
 
@@ -13,17 +14,11 @@ Game::Game()
     // SetMouseOffset(0, 0);
     // SetMouseScale(1, 1);
 
-    b2SetLengthUnitsPerMeter(pixelPerMeter);
+    Globals::Init();
+    m_worldId = Globals::GetWorldId();
+    m_inputManager = Globals::GetInputManager();
 
-    b2WorldDef worldDef = b2DefaultWorldDef();
-    worldDef.gravity = {0, 0};
-    m_worldId = b2CreateWorld(&worldDef);
-    
-
-    textureManager = new AssetManager();
-    inputManager = new InputManager();
-
-    scene = new Scene(textureManager, inputManager, m_worldId);
+    scene = new Scene();
     b2Vec2 pos;
     pos.x = 100;
     pos.y = 100;
@@ -36,23 +31,14 @@ Game::Game()
 
 Game::~Game()
 {
-    if(scene)
+    if (scene)
     {
         delete (scene);
         scene = nullptr;
     }
-    if (textureManager)
-    {
-        delete (textureManager);
-        textureManager = nullptr;
-    }
-    if (inputManager)
-    {
-        delete (inputManager);
-        inputManager = nullptr;
-    }
 
-    b2DestroyWorld(m_worldId);
+    Globals::Shutdown();
+
     CloseWindow();
 }
 
@@ -61,7 +47,7 @@ void Game::run()
     while (!WindowShouldClose())
     {
         accumalator += GetFrameTime();
-        
+
         while (accumalator >= fixedTimeStep)
         {
             accumalator -= fixedTimeStep;
@@ -74,7 +60,7 @@ void Game::run()
 
 void Game::Update()
 {
-    inputManager->Update();
+    m_inputManager->Update();
     scene->update();
 }
 

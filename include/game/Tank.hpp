@@ -3,10 +3,8 @@
 #include "raymath.h"
 #include "core/AssetManager.hpp"
 #include "iostream"
-#include "core/Constants.hpp"
 #include "core/GameObject.hpp"
 #include "core/InputManager.hpp"
-
 #include "box2d/box2d.h"
 
 class Game;
@@ -27,7 +25,7 @@ enum TankColor
 class Tank : public GameObject
 {
 public:
-    Tank(b2WorldId worldId, b2Vec2 position, AssetManager *textureManager, InputManager *inputManager, TankType type = TANK_PLAYER, TankColor color = TANK_GREEN);
+    Tank(b2Vec2 position, TankType type = TANK_PLAYER, TankColor color = TANK_GREEN);
     ~Tank();
     void Update() override;
     void Draw() override;

@@ -2,7 +2,6 @@
 
 #include "raylib.h"
 #include "raymath.h"
-#include "Constants.hpp"
 #include "stdio.h"
 
 #include "box2d/box2d.h"
