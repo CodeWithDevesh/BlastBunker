@@ -40,18 +40,18 @@ public:
 private:
     Texture2D m_textures[TEXTURE_COUNT];
     const char *m_texturePaths[TEXTURE_COUNT] = {
-        "../assets/bunker_body_green.png",
-        "../assets/bunker_turret_green.png",
-        "../assets/bullet.png",
-        "../assets/sand.jpg",
-        "../assets/explosion.png",
+        "assets/bunker_body_green.png",
+        "assets/bunker_turret_green.png",
+        "assets/bullet.png",
+        "assets/sand.jpg",
+        "assets/explosion.png",
     };
 
     Sound m_sounds[SOUND_COUNT];
     Sound bulletSounds[FIRE_SOUND_COUNT];
     const char *m_soundPaths[SOUND_COUNT] = {
-        "../assets/explosion.wav",
-        "../assets/fire-player.wav",
+        "assets/explosion.wav",
+        "assets/fire-player.wav",
     };
 
     int currentFirePlayerSound = 0;

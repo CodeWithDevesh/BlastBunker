@@ -32,6 +32,11 @@ target_link_libraries(bunkblaster PRIVATE box2d raylib)
 target_include_directories(bunkblaster PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/include())
 
 
+add_custom_command(TARGET bunkblaster POST_BUILD
+    COMMAND ${CMAKE_COMMAND} -E copy_directory
+    ${CMAKE_SOURCE_DIR}/assets $<TARGET_FILE_DIR:bunkblaster>/assets
+)
+
 if (MSVC)
 	set_property(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR} PROPERTY VS_STARTUP_PROJECT bunkblaster)
 	set_property(TARGET bunkblaster PROPERTY VS_DEBUGGER_WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}")
@@ -44,3 +49,4 @@ if (EMSCRIPTEN)
 	set(CMAKE_EXECUTABLE_SUFFIX ".html")
 	target_link_options(bunkblaster PROPERTIES LINK_FLAGS "--preload-file images@images -sWASM=1 -sASYNCIFY -sALLOW_MEMORY_GROWTH=1 --shell-file ${CMAKE_SOURCE_DIR}/minshell.html")
 endif()
+

@@ -9,10 +9,6 @@ AssetManager::AssetManager()
 
     for (int i = 0; i < SOUND_COUNT; i++)
     {
-        if (i == SOUND_PLAYER_FIRE)
-        {
-            continue;
-        }
         m_sounds[i] = LoadSound(m_soundPaths[i]);
     }
 
