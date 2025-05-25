@@ -25,11 +25,24 @@ FetchContent_Declare(
 )
 FetchContent_MakeAvailable(raylib)
 
+FetchContent_Declare(
+	enet
+	GIT_REPOSITORY https://github.com/lsalzman/enet.git
+	GIT_TAG master
+	GIT_SHALLOW TRUE
+	GIT_PROGRESS TRUE
+)
+FetchContent_MakeAvailable(enet)
+
 file(GLOB_RECURSE SOURCES "src/*.cpp")
 
 add_executable(bunkblaster ${SOURCES})
-target_link_libraries(bunkblaster PRIVATE box2d raylib)
-target_include_directories(bunkblaster PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/include())
+target_link_libraries(bunkblaster PRIVATE box2d raylib enet)
+
+target_include_directories(bunkblaster PRIVATE 
+	${CMAKE_CURRENT_SOURCE_DIR}/include
+	${enet_SOURCE_DIR}/include
+)
 
 
 add_custom_command(TARGET bunkblaster POST_BUILD
