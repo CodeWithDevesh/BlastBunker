@@ -1,5 +1,7 @@
 #pragma once
 
+#ifdef CLIENT
+
 #include <raylib.h>
 
 // append new ones to the end of the enum
@@ -56,3 +58,5 @@ private:
 
     int currentFirePlayerSound = 0;
 };
+
+#endif // CLIENT

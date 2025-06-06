@@ -1,4 +1,5 @@
 #include "core/InputManager.hpp"
+#ifdef CLIENT
 
 InputManager::InputManager()
 {
@@ -41,3 +42,5 @@ void InputManager::Update()
     else
         rotateRight = false;
 }
+
+#endif // CLIENT

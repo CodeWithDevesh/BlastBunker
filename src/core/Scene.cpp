@@ -6,7 +6,10 @@ std::vector<GameObject *> Scene::gameObjects;
 Scene::Scene()
 {
     m_worldId = Globals::GetWorldId();
+
+#ifdef CLIENT
     backgroundTexture = Globals::GetAssetManager()->getTexture(TEXTURE_SAND);
+#endif // CLIENT
 }
 
 Scene::~Scene()
@@ -53,6 +56,7 @@ void Scene::update()
     }
 }
 
+#ifdef CLIENT
 void Scene::render()
 {
     for (int y = 0; y < GetScreenHeight(); y += backgroundTexture.height)
@@ -82,6 +86,7 @@ void Scene::render()
         }
     }
 }
+#endif // CLIENT
 
 void Scene::spawnBullet(b2Vec2 pos, float rot)
 {

@@ -1,5 +1,7 @@
 #include "core/AssetManager.hpp"
 
+#ifdef CLIENT
+
 AssetManager::AssetManager()
 {
     for (int i = 0; i < TEXTURE_COUNT; i++)
@@ -62,3 +64,6 @@ char *AssetManager::getSoundPath(const SoundType type) const
 {
     return const_cast<char *>(m_soundPaths[type]);
 }
+
+
+#endif // CLIENT

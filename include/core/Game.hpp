@@ -1,8 +1,11 @@
 #pragma once
-#include <raylib.h>
+
 #include <vector>
 #include "Scene.hpp"
+#ifdef CLIENT
 #include "InputManager.hpp"
+#include <raylib.h>
+#endif
 
 #include "box2d/box2d.h"
 
@@ -14,6 +17,10 @@ public:
     void run();
     ~Game();
     static void spwanBullet(b2Vec2 pos, float dir);
+    static inline void quit()
+    {
+        isRunning = false;
+    }
 
 private:
     void Update();
@@ -21,10 +28,11 @@ private:
 
     b2WorldId m_worldId;
 
+#ifdef CLIENT
     InputManager *m_inputManager;
+#endif
 
-    static Scene* scene;
-
+    static Scene *scene;
+    static bool isRunning;
     float accumalator = 0;
-
 };

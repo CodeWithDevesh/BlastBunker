@@ -2,22 +2,27 @@
 #include "core/Globals.hpp"
 
 Scene *Game::scene;
+bool Game::isRunning;
 
 Game::Game()
 {
+#ifdef CLIENT
     InitWindow(screenWidth, screenHeight, "BunkBlaster");
     InitAudioDevice();
     SetTargetFPS(60);
     // ToggleFullscreen();
     SetConfigFlags(FLAG_VSYNC_HINT | FLAG_WINDOW_UNDECORATED);
-    // DisableCursor();
-    // SetWindowState(FLAG_WINDOW_MOUSE_PASSTHROUGH);
-    // SetMouseOffset(0, 0);
-    // SetMouseScale(1, 1);
+// DisableCursor();
+// SetWindowState(FLAG_WINDOW_MOUSE_PASSTHROUGH);
+// SetMouseOffset(0, 0);
+// SetMouseScale(1, 1);
+#endif // CLIENT
 
     Globals::Init();
     m_worldId = Globals::GetWorldId();
+#ifdef CLIENT
     m_inputManager = Globals::GetInputManager();
+#endif
 
     scene = new Scene();
     b2Vec2 pos;
@@ -45,7 +50,8 @@ Game::~Game()
 
 void Game::run()
 {
-    while (!WindowShouldClose())
+    isRunning = true;
+    while (isRunning)
     {
         accumalator += GetFrameTime();
 
@@ -55,16 +61,27 @@ void Game::run()
             b2World_Step(m_worldId, fixedTimeStep, 4);
             Update();
         }
+
+#ifdef CLIENT
+        if (WindowShouldClose())
+        {
+            quit();
+            break;
+        }
         Render();
+#endif
     }
 }
 
 void Game::Update()
 {
+#ifdef CLIENT
     m_inputManager->Update();
+#endif
     scene->update();
 }
 
+#ifdef CLIENT
 void Game::Render()
 {
     BeginDrawing();
@@ -73,6 +90,7 @@ void Game::Render()
     scene->render();
     EndDrawing();
 }
+#endif
 
 void Game::spwanBullet(b2Vec2 pos, float dir)
 {

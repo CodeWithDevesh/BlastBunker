@@ -5,12 +5,13 @@
 
 Tank::Tank(b2Vec2 pos, TankType type, TankColor color)
 {
-    m_inputManager = Globals::GetInputManager();
 
     bodyPos = pos;
     m_tankType = type;
     m_tankColor = color;
 
+#ifdef CLIENT
+    m_inputManager = Globals::GetInputManager();
     if (type == TANK_ENEMY)
     {
         healthBarColor = RED;
@@ -27,6 +28,7 @@ Tank::Tank(b2Vec2 pos, TankType type, TankColor color)
 
     bodyFrameRec = {0, 0, (float)bodyFrameWidth, (float)bodyFrameHeight};
     turretFrameRec = {0, 0, (float)turretFrameWidth, (float)turretFrameHeight};
+#endif // CLIENT
 
     b2BodyDef bodyDef = b2DefaultBodyDef();
     bodyDef.type = b2_dynamicBody;

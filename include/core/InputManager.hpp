@@ -1,5 +1,5 @@
 #pragma once
-
+#ifdef CLIENT
 #include <raylib.h>
 
 class InputManager
@@ -27,3 +27,5 @@ private:
     bool rotateLeft = false;
     bool rotateRight = false;
 };
+
+#endif // CLIENT

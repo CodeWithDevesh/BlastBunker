@@ -1,11 +1,14 @@
 #pragma once
-#include <raylib.h>
 #include "game/Tank.hpp"
 #include "game/Bullet.hpp"
 #include "game/Explosion.hpp"
+#include <vector>
+
+#ifdef CLIENT
+#include <raylib.h>
 #include "AssetManager.hpp"
 #include "InputManager.hpp"
-#include <vector>
+#endif // CLIENT
 
 class Scene
 {
@@ -16,12 +19,18 @@ public:
     static void spawnTank(b2Vec2 pos, TankType type = TANK_PLAYER, TankColor color = TANK_GREEN);
     static void spawnExplosion(b2Vec2 pos);
     void update();
+
+#ifdef CLIENT
     void render();
+#endif // CLIENT
 
 private:
     b2WorldId m_worldId;
     static std::vector<GameObject *> gameObjects;
-    Texture2D backgroundTexture;
     b2ContactEvents m_contactEvents;
-    b2ContactBeginTouchEvent* m_contactBeginTouchEvents;
+    b2ContactBeginTouchEvent *m_contactBeginTouchEvents;
+
+#ifdef CLIENT
+    Texture2D backgroundTexture;
+#endif // CLIENT
 };
