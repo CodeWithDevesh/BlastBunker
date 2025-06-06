@@ -12,35 +12,37 @@ AssetManager::AssetManager()
         m_sounds[i] = LoadSound(m_soundPaths[i]);
     }
 
-    for (int i = 0; i < FIRE_SOUND_COUNT; i++)
+    for (auto &bulletSound : bulletSounds)
     {
-        bulletSounds[i] = LoadSound(m_soundPaths[SOUND_PLAYER_FIRE]);
-        SetSoundVolume(bulletSounds[i], 0.5f);
+        bulletSound = LoadSound(m_soundPaths[SOUND_PLAYER_FIRE]);
+        SetSoundVolume(bulletSound, 0.5f);
     }
 }
+
 AssetManager::~AssetManager()
 {
-    for (int i = 0; i < TEXTURE_COUNT; i++)
+    for (const auto &m_texture : m_textures)
     {
-        UnloadTexture(m_textures[i]);
+        UnloadTexture(m_texture);
     }
 
-    for (int i = 0; i < SOUND_COUNT; i++)
+    for (const auto &m_sound : m_sounds)
     {
-        UnloadSound(m_sounds[i]);
+        UnloadSound(m_sound);
     }
 
-    for (int i = 0; i < FIRE_SOUND_COUNT; i++)
+    for (const auto &bulletSound : bulletSounds)
     {
-        UnloadSound(bulletSounds[i]);
+        UnloadSound(bulletSound);
     }
 }
-Texture2D AssetManager::getTexture(TextureType type)
+
+Texture2D AssetManager::getTexture(const TextureType type) const
 {
     return m_textures[type];
 }
 
-Sound AssetManager::getSound(SoundType type)
+Sound AssetManager::getSound(const SoundType type)
 {
     if (type == SOUND_PLAYER_FIRE)
     {
@@ -51,11 +53,12 @@ Sound AssetManager::getSound(SoundType type)
     return m_sounds[type];
 }
 
-char *AssetManager::getTexturePath(TextureType type)
+char *AssetManager::getTexturePath(const TextureType type) const
 {
-    return (char *)m_texturePaths[type];
+    return const_cast<char *>(m_texturePaths[type]);
 }
-char *AssetManager::getSoundPath(SoundType type)
+
+char *AssetManager::getSoundPath(const SoundType type) const
 {
-    return (char *)m_soundPaths[type];
+    return const_cast<char *>(m_soundPaths[type]);
 }

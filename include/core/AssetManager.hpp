@@ -32,10 +32,10 @@ public:
     AssetManager();
     ~AssetManager();
 
-    Texture2D getTexture(TextureType type);
+    [[nodiscard]] Texture2D getTexture(TextureType type) const;
     Sound getSound(SoundType type);
-    char *getTexturePath(TextureType type);
-    char *getSoundPath(SoundType type);
+    [[nodiscard]] char *getTexturePath(TextureType type) const;
+    [[nodiscard]] char *getSoundPath(SoundType type) const;
 
 private:
     Texture2D m_textures[TEXTURE_COUNT];
