@@ -5,6 +5,7 @@ set(CMAKE_CXX_STANDARD 17)
 include(FetchContent)
 
 set_property(GLOBAL PROPERTY USE_FOLDERS ON)
+set(EXPORT_COMPILE_COMMANDS ON)
 
 
 FetchContent_Declare(
@@ -29,7 +30,7 @@ file(GLOB_RECURSE SOURCES "src/*.cpp")
 
 add_executable(bunkblaster ${SOURCES})
 target_link_libraries(bunkblaster PRIVATE box2d raylib)
-target_include_directories(bunkblaster PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/include())
+target_include_directories(bunkblaster PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/include)
 
 
 add_custom_command(TARGET bunkblaster POST_BUILD
