@@ -1,7 +1,7 @@
 #include "core/Scene.hpp"
+#include "core/AssetManager.hpp"
 #include "core/Globals.hpp"
 
-std::vector<GameObject *> Scene::gameObjects;
 
 Scene::Scene() {
   m_worldId = Globals::GetWorldId();
@@ -16,7 +16,6 @@ Scene::~Scene() {
 }
 
 void Scene::update() {
-
   m_contactEvents = b2World_GetContactEvents(m_worldId);
   for (int i = 0; i < m_contactEvents.beginCount; i++) {
     b2ContactBeginTouchEvent *event = &m_contactEvents.beginEvents[i];
@@ -30,7 +29,6 @@ void Scene::update() {
 
   for (int i = 0; i < gameObjects.size();) {
     GameObject *obj = gameObjects[i];
-
     if (!obj) {
       gameObjects.erase(gameObjects.begin() + i);
       continue;
@@ -67,17 +65,6 @@ void Scene::render() {
   }
 }
 
-void Scene::spawnBullet(b2Vec2 pos, float rot) {
-  Bullet *b = new Bullet(pos, rot);
-  gameObjects.push_back(b);
-}
-
-void Scene::spawnTank(b2Vec2 pos, TankType type, TankColor color) {
-  Tank *tank = new Tank(pos, type, color);
-  gameObjects.push_back(tank);
-}
-
-void Scene::spawnExplosion(b2Vec2 pos) {
-  Explosion *explosion = new Explosion(pos);
-  gameObjects.push_back(explosion);
+void Scene::addGameObject(GameObject *obj){
+  gameObjects.push_back(obj);
 }

@@ -1,5 +1,7 @@
 #include "game/Bullet.hpp"
 #include "core/Globals.hpp"
+#include "raylib.h"
+#include "stdio.h"
 
 Bullet::Bullet(b2Vec2 position, float rot) {
   m_bodyTexture = Globals::GetAssetManager()->getTexture(TEXTURE_BULLET);

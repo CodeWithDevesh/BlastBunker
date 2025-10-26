@@ -1,9 +1,13 @@
 #include "core/Game.hpp"
 #include "core/Globals.hpp"
+#include "game/Tank.hpp"
 
 Scene *Game::scene;
+float Game::accumalator = 0;
+InputManager *Game::m_inputManager;
+b2WorldId Game::m_worldId;
 
-Game::Game() {
+void Game::init(){
   InitWindow(screenWidth, screenHeight, "BunkBlaster");
   InitAudioDevice();
   SetTargetFPS(60);
@@ -19,17 +23,9 @@ Game::Game() {
   m_inputManager = Globals::GetInputManager();
 
   scene = new Scene();
-  b2Vec2 pos;
-  pos.x = 100;
-  pos.y = 100;
-  scene->spawnTank(pos);
-
-  pos.x = 400;
-  pos.y = 400;
-  scene->spawnTank(pos, TANK_ENEMY);
 }
 
-Game::~Game() {
+void Game::uninit() {
   if (scene) {
     delete (scene);
     scene = nullptr;
@@ -53,6 +49,11 @@ void Game::run() {
   }
 }
 
+void Game::setScene(Scene *scene) {
+  delete Game::scene;
+  Game::scene = scene;
+}
+
 void Game::Update() {
   m_inputManager->Update();
   scene->update();
@@ -66,4 +67,6 @@ void Game::Render() {
   EndDrawing();
 }
 
-void Game::spwanBullet(b2Vec2 pos, float dir) { scene->spawnBullet(pos, dir); }
+void Game::addGameObject(GameObject *obj) { scene->addGameObject(obj); }
+
+Scene *Game::getCurrentScene() { return scene; }

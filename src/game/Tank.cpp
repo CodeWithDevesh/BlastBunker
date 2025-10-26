@@ -2,6 +2,8 @@
 #include "core/Game.hpp"
 #include "core/Globals.hpp"
 #include "core/Scene.hpp"
+#include "game/Bullet.hpp"
+#include "game/Explosion.hpp"
 
 Tank::Tank(b2Vec2 pos, TankType type, TankColor color) {
   m_inputManager = Globals::GetInputManager();
@@ -176,7 +178,7 @@ void Tank::fire() {
   b2Vec2 p = b2Body_GetPosition(m_bodyId);
   p.x += sinf(turretAngle * DEG2RAD) * turretFrameHeight;
   p.y += cosf(turretAngle * DEG2RAD) * turretFrameHeight;
-  Game::spwanBullet(p, turretAngle * DEG2RAD);
+  Game::addGameObject(new Bullet(p, turretAngle * DEG2RAD));
 
   b2Vec2 imp = {sinf((180 + turretAngle) * DEG2RAD),
                 cosf((180 + turretAngle) * DEG2RAD)};
@@ -210,13 +212,11 @@ void Tank::OnCollision(GameObject *other) {
   if (other == this)
     return;
   if (other->objectType == GAME_OBJECT_BULLET) {
-    printf("Tank collided with bullet\n");
     health--;
     if (health <= 0) {
-      Scene::spawnExplosion(b2Body_GetPosition(m_bodyId));
+      Game::addGameObject(new Explosion(b2Body_GetPosition(m_bodyId)));
       Destroy();
     }
   } else {
-    printf("Tank collided with %d\n", other->objectType);
   }
 }

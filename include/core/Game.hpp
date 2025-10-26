@@ -1,30 +1,28 @@
 #pragma once
-#include <raylib.h>
-#include <vector>
-#include "Scene.hpp"
 #include "InputManager.hpp"
+#include "Scene.hpp"
 
-#include "box2d/box2d.h"
-
-class Game
-{
+class Game {
 private:
 public:
-    Game(/* args */);
-    void run();
-    ~Game();
-    static void spwanBullet(b2Vec2 pos, float dir);
+  static void run();
+  static void addGameObject(GameObject *obj);
+  static void setScene(Scene *scene);
+  static Scene *getCurrentScene();
+  static void init();
+  static void uninit();
 
 private:
-    void Update();
-    void Render();
+  Game() = delete;
+  ~Game() = delete;
+  static void Update();
+  static void Render();
 
-    b2WorldId m_worldId;
+  static b2WorldId m_worldId;
 
-    InputManager *m_inputManager;
+  static InputManager *m_inputManager;
 
-    static Scene* scene;
+  static Scene *scene;
 
-    float accumalator = 0;
-
+  static float accumalator;
 };

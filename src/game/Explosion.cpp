@@ -2,7 +2,6 @@
 #include "core/Globals.hpp"
 
 Explosion::Explosion(b2Vec2 pos) {
-  // m_texture = AssetManager::GetInstance()->getTexture(TEXTURE_EXPLOSION);
   m_texture = Globals::GetAssetManager()->getTexture(TEXTURE_EXPLOSION);
   m_sound = Globals::GetAssetManager()->getSound(SOUND_EXPLOSION);
   m_frameWidth = m_texture.width / 5.;
