@@ -2,6 +2,8 @@
 #include "game/Tank.hpp"
 
 int main() {
+  Game::init();
+
   Scene* scene = new Scene();
   b2Vec2 pos;
   pos.x = 100;
@@ -12,7 +14,6 @@ int main() {
   pos.y = 400;
   scene->addGameObject(new Tank(pos, TANK_ENEMY));
 
-  Game::init();
   Game::setScene(scene);
   Game::run();
   Game::uninit();
